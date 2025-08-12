@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node api/index.js",
     "build": "echo 'Build step not required for this project'",
-    "postbuild": "npx knex migrate:latest --knexfile knexfile.js",
+    "postbuild": "npx knex migrate:latest --env production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

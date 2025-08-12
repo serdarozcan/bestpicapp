@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const API_BASE_URL = 'http://localhost:3000';
+    const API_BASE_URL = ''; // Adresi göreceli hale getirerek hem lokalde hem de canlıda çalışmasını sağla
     
     // --- DOM Elementleri ---
     const userEmailSpan = document.getElementById('user-email');

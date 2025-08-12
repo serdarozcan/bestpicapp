@@ -1,0 +1,229 @@
+{
+  "name": "BetterPic",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://queue.fal.run/fal-ai/flux-pro/kontext",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Key 27a60dfe-c523-45a5-8536-9b695e823da9:1a11deb7858d51cc4150d139cb60d88a"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "prompt",
+              "value": "Put the male into an office environment, also make him wear a black suit."
+            },
+            {
+              "name": "image_url",
+              "value": "{{ $json.query })"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -464,
+        -128
+      ],
+      "id": "42aefd07-4a1d-4708-b1cd-7cd7912b8b8a",
+      "name": "Görüntü Oluşturucu"
+    },
+    {
+      "parameters": {
+        "url": "=https://queue.fal.run/fal-ai/flux-pro/requests/{{ $json.request_id }}/status",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Key 27a60dfe-c523-45a5-8536-9b695e823da9:1a11deb7858d51cc4150d139cb60d88a"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -240,
+        -128
+      ],
+      "id": "4607ed7d-7859-4c17-89cf-a4a404e56e31",
+      "name": "Durum"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -16,
+        -192
+      ],
+      "id": "e85020e2-b6cd-4d5a-ac06-51c508eb50db",
+      "name": "Wait",
+      "webhookId": "aae26e17-6498-4c7c-a590-8844c46831f8"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "77e6f420-95d0-4da2-a680-2520f5c78a11",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "COMPLETED",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        -128
+      ],
+      "id": "e8868d71-86ce-4b69-ba28-2223a579de82",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "url": "=https://queue.fal.run/fal-ai/flux-pro/requests/{{ $json.request_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Key 27a60dfe-c523-45a5-8536-9b695e823da9:1a11deb7858d51cc4150d139cb60d88a"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        432,
+        -128
+      ],
+      "id": "349194c9-cb31-4b7c-892d-9f586f678211",
+      "name": "Sonucu Al"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "45f36bf4-8c2c-454b-b5dc-014b41921d5b",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -672,
+        -112
+      ],
+      "id": "6e82db1b-4c33-486a-9551-1d9927ffb26c",
+      "name": "Webhook",
+      "webhookId": "45f36bf4-8c2c-454b-b5dc-014b41921d5b"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Görüntü Oluşturucu": {
+      "main": [
+        [
+          {
+            "node": "Durum",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Durum": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Sonucu Al",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Durum",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Görüntü Oluşturucu",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "82b5dc88-fe6f-4e33-9854-d4feee71f60f",
+  "meta": {
+    "instanceId": "0a6a217f1fca27da4071bfc939ef22010b52223efe880c99ec7d240a4549560e"
+  },
+  "id": "PG9Sj1vsQpkhH7rD",
+  "tags": []
+}

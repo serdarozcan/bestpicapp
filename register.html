@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayıt Ol - BetterPic.io Clone</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css"> <!-- Giriş/Kayıt sayfaları için ek stiller -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <h1 class="auth-title">Yeni Hesap Oluşturun</h1>
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="email">E-posta Adresi</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Şifre</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                 <div class="form-group">
+                    <label for="password-confirm">Şifreyi Onayla</label>
+                    <input type="password" id="password-confirm" name="password-confirm" required>
+                </div>
+                <button type="submit" class="cta-button auth-button">Hesap Oluştur</button>
+            </form>
+            <p class="auth-switch">
+                Zaten bir hesabınız var mı? <a href="login.html">Giriş Yapın</a>
+            </p>
+        </div>
+    </div>
+    
+    <div id="error-toast" class="toast"></div>
+
+    <script src="auth.js"></script> <!-- Giriş/Kayıt işlemleri için ortak script -->
+</body>
+</html>

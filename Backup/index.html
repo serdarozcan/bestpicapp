@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BetterPic.io Clone</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">BetterPic</a></div>
+            <div class="nav-links">
+                <div id="guest-links">
+                    <a href="pricing.html" class="cta-button--secondary">Fiyatlandırma</a>
+                    <a href="login.html" class="cta-button--secondary">Giriş Yap</a>
+                    <a href="register.html" class="cta-button">Ücretsiz Dene</a>
+                </div>
+                <div id="user-links" style="display: none;">
+                    <a href="account.html">Hesabım</a>
+                    <a href="#" id="logout-button" class="cta-button">Çıkış Yap</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Saniyeler İçinde Profesyonel Kurumsal Vesikalık Fotoğraflar</h1>
+            <p>Sıradan bir fotoğrafı, iş dünyasına hazır, yüksek kaliteli bir portreye dönüştürün.</p>
+            <div class="upload-box-wrapper">
+                <div class="prompt-wrapper">
+                    <label for="prompt-input">Yapay Zeka Yönlendirmesi (Prompt)</label>
+                    <textarea id="prompt-input" rows="3">Al-enhanced 4K quality headshot perfect for professional use</textarea>
+                </div>
+                <div class="style-selector">
+                    <p class="style-selector-title">Veya bir stil seçin:</p>
+                    <div class="styles-container">
+                        <div class="style-card active" data-style-prompt="corporate headshot, office background, professional attire, soft lighting">
+                            <img src="https://images.pexels.com/photos/2381069/pexels-photo-2381069.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Kurumsal Stil">
+                            <span>Kurumsal</span>
+                        </div>
+                        <div class="style-card" data-style-prompt="outdoor portrait, natural light, blurred green background, casual but smart attire">
+                            <img src="https://images.pexels.com/photos/1382731/pexels-photo-1382731.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Dış Mekan Stili">
+                            <span>Dış Mekan</span>
+                        </div>
+                        <div class="style-card" data-style-prompt="black and white photo, classic studio lighting, plain background, timeless look">
+                             <img src="https://images.unsplash.com/photo-1598897516650-e4dc73d8e417?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8YmxhY2slMjBhbmQlMjB3aGl0ZSUyMHBvcnRyYWl0fGVufDB8fDB8fHww" alt="Siyah Beyaz Stil">
+                            <span>Siyah Beyaz</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="upload-box" class="upload-box">
+                    <p>Fotoğrafınızı buraya sürükleyin veya seçmek için tıklayın</p>
+                    <input type="file" id="image-input" hidden accept="image/*">
+                </div>
+                <button id="process-button" class="cta-button process-button-hidden">Fotoğrafı İşle</button>
+            </div>
+             <p class="terms">
+                Fotoğraf yükleyerek <a href="#">Hizmet Şartları</a> ve <a href="#">Gizlilik Politikamızı</a> kabul etmiş olursunuz.
+            </p>
+        </section>
+
+        <section class="results">
+            <div class="image-container" id="original-container">
+                <h3>Orijinal</h3>
+                <img id="original-image" src="" alt="Orijinal Fotoğraf">
+            </div>
+            <div class="image-container" id="processed-container">
+                <h3>BetterPic</h3>
+                <img id="processed-image" src="" alt="İşlenmiş Fotoğraf">
+                <div class="spinner-container" style="display: none;">
+                    <div class="spinner"></div>
+                    <p id="status-text"></p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <div id="error-toast" class="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+# Bağımlılıklar
+/node_modules
+
+# Çevre Değişkenleri
+.env
+
+# Veritabanı dosyası
+*.sqlite3
+
+# Loglar
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

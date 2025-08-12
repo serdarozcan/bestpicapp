@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BetterPic - Fotoğraf İyileştirme</title>
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --background-color: #f8f9fa;
+            --text-color: #212529;
+            --container-bg: #ffffff;
+            --border-color: #dee2e6;
+            --spinner-color: #007bff;
+            --error-color: #dc3545;
+            --success-color: #28a745;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: var(--container-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+        }
+        .control-section {
+            margin-bottom: 25px;
+        }
+        .control-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        #prompt-input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+        #image-input {
+            display: none;
+        }
+        .file-upload-label {
+            display: inline-block;
+            padding: 12px 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-weight: 500;
+        }
+        .file-upload-label:hover {
+            background-color: #5a6268;
+        }
+        #file-name {
+            margin-left: 15px;
+            font-style: italic;
+            color: var(--secondary-color);
+        }
+        #process-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: white;
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        #process-button:disabled {
+            background-color: #a0c7ff;
+            cursor: not-allowed;
+        }
+        #process-button:not(:disabled):hover {
+            background-color: #0056b3;
+        }
+        .status-area {
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            display: none;
+        }
+        .status-area.loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #e9ecef;
+        }
+        .status-area.error {
+            display: block;
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border-left-color: var(--spinner-color);
+            animation: spin 1s ease infinite;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .image-results {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .image-container {
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 10px;
+        }
+        .image-container h3 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+        }
+        .image-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            display: none;
+        }
+         @media (max-width: 600px) {
+            .image-results {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>BetterPic - Fotoğraf İyileştirme</h1>
+    
+    <div class="control-section">
+        <label for="prompt-input">İşlem Metni (Prompt)</label>
+        <textarea id="prompt-input" rows="3">Put the male into an office environment, also make him wear a black suit.</textarea>
+
+        <label for="image-input" class="file-upload-label">Fotoğraf Seç</label>
+        <input type="file" id="image-input" accept="image/*">
+        <span id="file-name">Henüz dosya seçilmedi.</span>
+    </div>
+
+    <button id="process-button">Fotoğrafı İşle</button>
+
+    <div id="status-area" class="status-area">
+        <div class="spinner"></div>
+        <span id="status-text"></span>
+    </div>
+
+    <div class="image-results">
+        <div class="image-container">
+            <h3>Orijinal Fotoğraf</h3>
+            <img id="original-image" src="" alt="Orijinal Fotoğraf">
+        </div>
+        <div class="image-container">
+            <h3>İşlenmiş Fotoğraf</h3>
+            <img id="processed-image" src="" alt="İşlenmiş Fotoğraf">
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // API Bilgileri
+    const IMAGE_UPLOAD_API_URL = 'https://api.imgbb.com/1/upload';
+    const IMAGE_UPLOAD_API_KEY = '3b7f1bd63e8992ea2ed1fcb052074bd5'; // Lütfen bu kısmı kendi ImgBB API anahtarınızla değiştirin.
+    const FAL_AUTH_KEY = 'Key 27a60dfe-c523-45a5-8536-9b695e823da9:1a11deb7858d51cc4150d139cb60d88a';
+    const FAL_API_BASE = 'https://queue.fal.run/fal-ai/flux-pro';
+
+    // DOM Elementleri
+    const imageInput = document.getElementById('image-input');
+    const processButton = document.getElementById('process-button');
+    const promptInput = document.getElementById('prompt-input');
+    const statusArea = document.getElementById('status-area');
+    const statusText = document.getElementById('status-text');
+    const originalImage = document.getElementById('original-image');
+    const processedImage = document.getElementById('processed-image');
+    const fileNameSpan = document.getElementById('file-name');
+
+    let selectedFile = null;
+
+    imageInput.addEventListener('change', (event) => {
+        selectedFile = event.target.files[0];
+        if (selectedFile) {
+            fileNameSpan.textContent = selectedFile.name;
+            originalImage.src = URL.createObjectURL(selectedFile);
+            originalImage.style.display = 'block';
+            processedImage.style.display = 'none';
+        } else {
+            fileNameSpan.textContent = 'Henüz dosya seçilmedi.';
+            originalImage.src = '';
+            originalImage.style.display = 'none';
+        }
+    });
+
+    processButton.addEventListener('click', async () => {
+        if (!selectedFile) {
+            showError('Lütfen önce bir fotoğraf seçin.');
+            return;
+        }
+        if (!promptInput.value.trim()) {
+            showError('Lütfen bir işlem metni girin.');
+            return;
+        }
+
+        disableUI();
+        
+        try {
+            // Adım 1: Resmi Base64'e çevir
+            const base64Image = await toBase64(selectedFile);
+
+            // Adım 2: Resmi geçici sunucuya yükle
+            updateStatus('1/4: Fotoğraf yükleniyor...');
+            const uploadedImageUrl = await uploadImage(base64Image);
+
+            // Adım 3: Fal.run ile işlemi başlat
+            updateStatus('2/4: Yapay zeka işlemi başlatılıyor...');
+            const requestId = await startFalRunJob(uploadedImageUrl, promptInput.value);
+            
+            // Adım 4: İşlem tamamlanana kadar durumu kontrol et
+            updateStatus('3/4: Fotoğraf işleniyor... (Bu işlem birkaç dakika sürebilir)');
+            await pollForResult(requestId);
+            
+        } catch (error) {
+            showError(error.message || 'Bilinmeyen bir hata oluştu.');
+        } finally {
+            enableUI();
+        }
+    });
+
+    function disableUI() {
+        processButton.disabled = true;
+        promptInput.disabled = true;
+        imageInput.disabled = true;
+    }
+
+    function enableUI() {
+        processButton.disabled = false;
+        promptInput.disabled = false;
+        imageInput.disabled = false;
+    }
+
+    function updateStatus(message) {
+        statusArea.className = 'status-area loading';
+        statusText.textContent = message;
+    }
+    
+    function hideStatus() {
+        statusArea.style.display = 'none';
+    }
+
+    function showError(message) {
+        statusArea.className = 'status-area error';
+        statusText.textContent = `Hata: ${message}`;
+        enableUI();
+    }
+
+    function toBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = error => reject(error);
+        });
+    }
+
+    async function uploadImage(base64Image) {
+        const formData = new FormData();
+        formData.append('key', IMAGE_UPLOAD_API_KEY);
+        formData.append('image', base64Image);
+
+        const response = await fetch(IMAGE_UPLOAD_API_URL, {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Resim yüklenemedi. Sunucu yanıtı: ${response.status} ${response.statusText} - ${errorText}`);
+        }
+
+        const data = await response.json();
+        if (data.success) {
+            return data.data.url;
+        } else {
+            throw new Error(`Resim yükleme API hatası: ${data.error.message}`);
+        }
+    }
+
+    async function startFalRunJob(imageUrl, prompt) {
+        const response = await fetch(`${FAL_API_BASE}/kontext`, {
+            method: 'POST',
+            headers: {
+                'Authorization': FAL_AUTH_KEY,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                image_url: imageUrl,
+                prompt: prompt
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Yapay zeka işlemi başlatılamadı: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data.request_id;
+    }
+    
+    async function getFalRunResult(requestId) {
+        const response = await fetch(`${FAL_API_BASE}/requests/${requestId}`, {
+             headers: { 'Authorization': FAL_AUTH_KEY }
+        });
+        if (!response.ok) {
+            throw new Error(`Sonuç alınamadı: ${response.statusText}`);
+        }
+        return await response.json();
+    }
+
+    function pollForResult(requestId) {
+        return new Promise((resolve, reject) => {
+            const interval = setInterval(async () => {
+                try {
+                    const statusResponse = await fetch(`${FAL_API_BASE}/requests/${requestId}/status`, {
+                        headers: { 'Authorization': FAL_AUTH_KEY }
+                    });
+                     if (!statusResponse.ok) {
+                        throw new Error(`Durum kontrol edilemedi: ${statusResponse.statusText}`);
+                    }
+                    const statusData = await statusResponse.json();
+
+                    if (statusData.status === 'COMPLETED') {
+                        clearInterval(interval);
+                        updateStatus('4/4: Sonuç alınıyor...');
+                        const resultData = await getFalRunResult(requestId);
+                        
+                        if (resultData && resultData.images && resultData.images[0] && resultData.images[0].url) {
+                            processedImage.src = resultData.images[0].url;
+                            processedImage.style.display = 'block';
+                            hideStatus();
+                        } else {
+                           // Gelişmiş hata ayıklama için tüm nesneyi string olarak logla
+                           console.error('Beklenmeyen sonuç formatı:', JSON.stringify(resultData, null, 2));
+                           throw new Error('İşlem tamamlandı ancak sonuç formatı beklenildiği gibi değil.');
+                        }
+                        resolve();
+                    } else if (statusData.status === 'FAILED' || statusData.status === 'ERROR') {
+                         clearInterval(interval);
+                         throw new Error(`İşlem başarısız oldu. Durum: ${statusData.status}`);
+                    }
+                    // 'IN_PROGRESS' veya 'QUEUED' ise beklemeye devam et
+                } catch (error) {
+                    clearInterval(interval);
+                    reject(error);
+                }
+            }, 3000); // Her 3 saniyede bir kontrol et
+        });
+    }
+
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hesabım - BetterPic.io Clone</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css"> <!-- Benzer stil için auth.css'i kullanabiliriz -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">BetterPic</a></div>
+            <div class="nav-links">
+                <a href="pricing.html">Fiyatlandırma</a>
+                <div id="guest-links" style="display: none;">
+                    <a href="login.html">Giriş Yap</a>
+                    <a href="register.html" class="cta-button">Ücretsiz Dene</a>
+                </div>
+                <div id="user-links">
+                    <a href="account.html">Hesabım</a>
+                    <a href="#" id="logout-button" class="cta-button">Çıkış Yap</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="auth-container">
+        <div class="auth-box">
+            <h1 class="auth-title">Hesap Bilgileri</h1>
+            <div id="account-details">
+                <p><strong>E-posta:</strong> <span id="user-email">Yükleniyor...</span></p>
+                <p><strong>Abonelik Durumu:</strong> <span id="subscription-status">Yükleniyor...</span></p>
+            </div>
+            <button id="manage-subscription-button" class="cta-button auth-button">Aboneliği Yönet</button>
+        </div>
+    </main>
+    
+    <div id="error-toast" class="toast"></div>
+
+    <script src="account.js"></script>
+</body>
+</html>

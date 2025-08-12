@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiyatlandırma - BetterPic.io Clone</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="pricing.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">BetterPic</a></div>
+            <div class="nav-links">
+                <a href="pricing.html">Fiyatlandırma</a>
+                <a href="login.html" class="cta-button--secondary">Giriş Yap</a>
+                <a href="register.html" class="cta-button">Ücretsiz Dene</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="pricing-main">
+        <section class="pricing-hero">
+            <h1>Size en uygun planı seçin</h1>
+            <p>Basit ve şeffaf fiyatlandırma. Gizli ücret yok.</p>
+        </section>
+
+        <section class="pricing-plans">
+            <!-- Plan 1: Başlangıç -->
+            <div class="plan">
+                <div class="plan-header">
+                    <h2>Başlangıç</h2>
+                    <p class="price">10<span>$/ay</span></p>
+                </div>
+                <ul class="features">
+                    <li><span class="checkmark">✔</span> 10 Kredi / ay</li>
+                    <li><span class="checkmark">✔</span> Standart Kalite</li>
+                    <li><span class="checkmark">✔</span> Topluluk Desteği</li>
+                </ul>
+                <button class="cta-button plan-button" data-plan="starter">Planı Seç</button>
+            </div>
+
+            <!-- Plan 2: Profesyonel (Öne Çıkan) -->
+            <div class="plan featured">
+                 <p class="badge">En Popüler</p>
+                <div class="plan-header">
+                    <h2>Profesyonel</h2>
+                    <p class="price">20<span>$/ay</span></p>
+                </div>
+                <ul class="features">
+                    <li><span class="checkmark">✔</span> 50 Kredi / ay</li>
+                    <li><span class="checkmark">✔</span> Yüksek Kalite</li>
+                    <li><span class="checkmark">✔</span> Öncelikli Destek</li>
+                    <li><span class="checkmark">✔</span> API Erişimi</li>
+                </ul>
+                <button class="cta-button plan-button" data-plan="professional">Planı Seç</button>
+            </div>
+
+            <!-- Plan 3: Kurumsal -->
+            <div class="plan">
+                <div class="plan-header">
+                    <h2>Kurumsal</h2>
+                    <p class="price">Bize Ulaşın</p>
+                </div>
+                <ul class="features">
+                    <li><span class="checkmark">✔</span> Özel Kredi Limiti</li>
+                    <li><span class="checkmark">✔</span> En Yüksek Kalite</li>
+                    <li><span class="checkmark">✔</span> Özel Destek Hattı</li>
+                    <li><span class="checkmark">✔</span> Takım Yönetimi</li>
+                </ul>
+                <button class="cta-button plan-button" data-plan="enterprise">Bize Ulaşın</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="pricing.js"></script>
+</body>
+</html>

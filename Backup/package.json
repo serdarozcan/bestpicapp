@@ -2,9 +2,11 @@
   "name": "bestpic",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "api/index.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node api/index.js",
+    "build": "echo 'Build step not required for this project'",
+    "postbuild": "npx knex migrate:latest --env production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -19,6 +21,7 @@
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
     "nodemon": "^3.1.10",
+    "pg": "^8.16.3",
     "sqlite3": "^5.1.7",
     "stripe": "^18.4.0"
   }
